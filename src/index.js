@@ -1,7 +1,13 @@
-// this file handles boot up of server
+// This file handles the boot-up of the server 
 
-const { app } = require ('./server');
+require('dotenv').config();
 
-app.listen(3000, () => {
-    console.log("Server running");
+const { databaseConnect } = require('./database');
+const { app } = require('./server');
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, async () => {
+	await databaseConnect();
+	console.log("Server running!");
 });

@@ -1,22 +1,25 @@
-
 const mongoose = require('mongoose');
 
+
+
 /**
- * Connect or create & connect to a database.
- * @date 12/9/2023 - 4:24:25 PM
+ * Connect or create & connect to a database
+ * @date 12/15/2023 - 9:10:47 PM
  *
  * @async
- * @returns
+ * @returns {*}
  */
 async function databaseConnect(){
-    try {
-        await mongoose.connect('mongodb+srv://stashAdmin:T5aXMnj1HcZHQfHC@zstashdb.rxv1iv5.mongodb.net/?retryWrites=true&w=majority');
-        console.log("Database connected!");
-    } catch (error) {
-        console.warn(`databaseConnect failed to connect to DB:\n${JSON.stringify(error)}`);
-    }
+	try {
+		// DB connection can take some time, eg. if DB is in the cloud 
+		console.log("Connecting to:\n" + process.env.DB_URI);
+		await mongoose.connect(process.env.DB_URI);
+		console.log("Database connected");
+	} catch (error) {
+		console.warn(`databaseConnect failed to connect to DB:\n${JSON.stringify(error)}`);
+	}
 }
 
 module.exports = {
-    databaseConnect
+	databaseConnect
 }
