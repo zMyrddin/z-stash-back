@@ -28,11 +28,11 @@ databaseConnect().then(async () => {
     });
 
     let newStash1 = new Stash({
-        name: "Stash 1",
+        stashName: "Stash 1",
         location: "In the woods near the old mill.",
         landmarks: ["5m West of the broken shovel","near puddle when raining"],
         hostileSighting: false,
-        importantNotes: ["Contains canned goods.","Nothing else is special"]
+        notes: ["Contains canned goods.","Nothing else is special"]
     });
 
     await newStash1.save().then(() => {

@@ -14,17 +14,14 @@ const StashSchema = new mongoose.Schema({
 	landmarks: {
 		type: [String],
 		required: false,
-		unique: false
 	},
     hostileSighting:{
 		type: Boolean,
 		required: true,
-		unique: false
 	},
     notes: {
 		type: [String],
 		required: false,
-		unique: false
 	}
 });
 
