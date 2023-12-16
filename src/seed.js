@@ -1,16 +1,28 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const { databaseConnect } = require('./database');
+import { Stash } from './models/Stashmodel';
+import { User } from './models/UserModel';
 
 databaseConnect().then(async () => {
 
     console.log("Creating seed data!");
 
-    const Stash = mongoose.model('Stash', {
-        name: String,
-        location: String,
-        landmarks: [String],
-        hostileSighting: Boolean,
-        importantNotes: [String]
+    // const Stash = mongoose.model('Stash', {
+    //     name: String,
+    //     location: String,
+    //     landmarks: [String],
+    //     hostileSighting: Boolean,
+    //     importantNotes: [String]
+    // });
+
+    let newUser1 = new User ({
+        username:"admin",
+        password: "fireflyadmin",
+        isAdmin: true
+    });
+
+    await newUser1.save().then(() =>{
+        console.log("Seed user created")
     });
 
     let newStash1 = new Stash({
@@ -22,6 +34,8 @@ databaseConnect().then(async () => {
     });
 
     await newStash1.save().then(() => {
-        console.log("Stash 1 is saved in the DB.");
+        console.log("Seed stash is saved in the DB.");
     });
+
+
 });
