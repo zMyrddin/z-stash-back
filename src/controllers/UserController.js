@@ -1,10 +1,10 @@
 // import Express library
 const express = require('express');
 const { User } = require('../models/UserModel');
-const { comparePassword, generateJwt } = require('../functions/userAuthFunctions');
+const { comparePassword, generateJwt } = require('../functions/AuthFunctions');
 
 // make an instance of a Router
-const router = express.Router();
+const userRouter = express.Router();
 
 // customise the router instance 
 
@@ -29,21 +29,21 @@ const router = express.Router();
 		}
 	]
 */
-router.get("/", async (request, response) => {
+userRouter.get("/", async (request, response) => {
 	let result = await User.find({});
 
 	response.json({result});
 })
 
 // GET localhost:3000/users/someid
-router.get("/:id", async (request, response) => {
+userRouter.get("/:id", async (request, response) => {
 	let result = await User.findOne({_id: request.params.id});
 
 	response.json({result});
 })
 
 // POST localhost:3000/users/
-router.post("/", async (request, response) => {
+userRouter.post("/", async (request, response) => {
 	let newUser = await User.create(request.body).catch(error => error);
 
 	response.json(newUser);
@@ -52,7 +52,7 @@ router.post("/", async (request, response) => {
 // POST localhost:3000/users/login
 // request.body = {username: "admin", password: "Password1"}
 // respond with {jwt: "laskdnalksfdnal;fgvkmsngb;sklnmb", valid: true}
-router.post("/login", async (request, response) => {
+userRouter.post("/login", async (request, response) => {
 	// Find user by provided username 
 	let targetUser = await User.findOne({username: request.body.username}).catch(error => error);
 
@@ -74,4 +74,4 @@ router.post("/login", async (request, response) => {
 });
 
 
-module.exports = router;
+module.exports = userRouter;
