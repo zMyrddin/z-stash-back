@@ -1,7 +1,9 @@
 // const mongoose = require('mongoose');
 const { databaseConnect } = require('./database');
-import { Stash } from './models/Stashmodel';
-import { User } from './models/UserModel';
+const { Stash } = require ('./models/StashModel');
+const { User } = require ('./models/UserModel');
+// import { Stash } from './models/StashModel';
+// import { User } from './models/UserModel';
 
 databaseConnect().then(async () => {
 
