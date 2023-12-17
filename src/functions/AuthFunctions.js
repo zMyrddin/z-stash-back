@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 async function comparePassword(plaintextPassword, hashedPassword) { 
 	let doesPasswordMatch = false;
@@ -37,10 +37,6 @@ async function authenticateJWT(request, response, next) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
-        
-        // Log the decoded token and token itself
-        console.log('Decoded Token:', decoded);
-        console.log('Token:', token);
 
         const user = await User.findById(decoded.userId);
 
@@ -50,7 +46,13 @@ async function authenticateJWT(request, response, next) {
 
         // Attach user information to the request object
         request.user = user;
+                
+        // Log the decoded token and token itself
+        console.log('Decoded Token:', decoded);
+        console.log('Token:', token);
+
         next();
+        
     } catch (error) {
         console.error(error);
         return response.status(401).json({ error: 'Unauthorized: Invalid token' });

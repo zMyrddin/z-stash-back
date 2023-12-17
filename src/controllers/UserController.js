@@ -2,7 +2,6 @@
 const express = require('express');
 const { User } = require('../models/UserModel');
 const { comparePassword, generateJwt, authenticateJWT } = require('../functions/AuthFunctions');
-const { Admin } = require('mongodb');
 
 // make an instance of a Router
 const userRouter = express.Router();
@@ -66,6 +65,7 @@ userRouter.post("/login", async (request, response) => {
 
 	// If they provided the correct, generate a JWT
 	let freshJwt = generateJwt(targetUser._id.toString(), targetUser.role);
+	console.log("User: " +request.body.username+" has logged in.");
 
 	// respond with the JWT 
 	response.json({
@@ -77,9 +77,8 @@ userRouter.post("/login", async (request, response) => {
 // DELETE localhost:3000/users/someid
 userRouter.delete("/:id", authenticateJWT, async (request, response) => {
     try {
-        // Assuming you have the user's role information stored in the JWT payload
-        const userRole = request.user.role;
-		console.log('User Role:', userRole);
+        // Assuming you have the user's role information stored in the request object
+        let userRole = request.user.role; // Use request.user instead of request.body
 
         // Check if the authenticated user has admin privileges
         if (userRole !== "admin") {
@@ -87,7 +86,7 @@ userRouter.delete("/:id", authenticateJWT, async (request, response) => {
         }
 
         // Proceed with user deletion
-        const deletedUser = await User.findByIdAndDelete(request.params.id);
+        let deletedUser = await User.findByIdAndDelete(request.params.id);
 
         if (!deletedUser) {
             return response.status(404).json({ error: "User not found." });
