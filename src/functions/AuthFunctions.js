@@ -9,18 +9,18 @@ async function comparePassword(plaintextPassword, hashedPassword) {
 	return doesPasswordMatch;
 }
 
-function generateJwt(userId){
+function generateJwt(userId, role){
 
 	let newJwt = jwt.sign(
 		// Payload
-		{userId}, 
+		{userId, role}, 
 
 		// Secret key for server-only verification
 		process.env.JWT_KEY,
 
 		// Options
 		{
-			expiresIn: "1h"
+			expiresIn: "7d"
 		}
 
 	);

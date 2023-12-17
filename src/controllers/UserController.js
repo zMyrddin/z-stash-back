@@ -65,7 +65,7 @@ userRouter.post("/login", async (request, response) => {
 	}
 
 	// If they provided the correct, generate a JWT
-	let freshJwt = generateJwt(targetUser._id.toString());
+	let freshJwt = generateJwt(targetUser._id.toString(), targetUser.role.toString());
 
 	// respond with the JWT 
 	response.json({
