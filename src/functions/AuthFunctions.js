@@ -28,7 +28,31 @@ function generateJwt(userId){
 	return newJwt;
 }
 
+async function authenticateJWT(request, response, next) {
+    const token = request.header('Authorization');
+
+    if (!token) {
+        return response.status(401).json({ error: 'Unauthorized: Missing token' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        const user = await User.findById(decoded.userId);
+
+        if (!user) {
+            return response.status(401).json({ error: 'Unauthorized: Invalid token' });
+        }
+
+        // Attach user information to the request object
+        request.user = user;
+        console.log('Decoded Token:', decoded); // Log the decoded token
+        next();
+    } catch (error) {
+        console.error(error);
+        return response.status(401).json({ error: 'Unauthorized: Invalid token' });
+    }
+}
 
 module.exports = {
-	comparePassword, generateJwt
+	comparePassword, generateJwt, authenticateJWT
 }

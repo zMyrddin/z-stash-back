@@ -1,7 +1,7 @@
 // import Express library
 const express = require('express');
 const { User } = require('../models/UserModel');
-const { comparePassword, generateJwt } = require('../functions/AuthFunctions');
+const { comparePassword, generateJwt, authenticateJWT } = require('../functions/AuthFunctions');
 
 // make an instance of a Router
 const userRouter = express.Router();
@@ -73,29 +73,29 @@ userRouter.post("/login", async (request, response) => {
 
 });
 
-userRouter.delete("/:id", async (request, response) => {
-	try {
-	  // Check if the user making the request is an admin
-	  const requestingUserId = request.user._id; // Assuming you attach user information to the request during authentication
-	  const requestingUser = await User.findById(requestingUserId);
-  
-	  if (requestingUser.role !== 'admin') {
-		return response.status(403).json({ error: "You are not authorized to delete users." });
-	  }
-  
-	  // If the requester is an admin, proceed with user deletion
-	  const deletedUser = await User.findByIdAndDelete(request.params.id);
-  
-	  if (!deletedUser) {
-		return response.status(404).json({ error: "User not found." });
-	  }
-  
-	  response.json({ success: true, message: "User deleted successfully." });
-	} catch (error) {
-	  console.error(error);
-	  response.status(500).json({ error: "Internal Server Error" });
-	}
-  });
+// DELETE localhost:3000/users/someid
+userRouter.delete("/:id", authenticateJWT, async (request, response) => {
+    try {
+        // Check if the user making the request is an admin
+        const requestingUser = request.user; // Now you can use request.user directly
+
+        if (requestingUser.role !== 'admin') {
+            return response.status(403).json({ error: "You are not authorized to delete users." });
+        }
+
+        // If the requester is an admin, proceed with user deletion
+        const deletedUser = await User.findByIdAndDelete(request.params.id);
+
+        if (!deletedUser) {
+            return response.status(404).json({ error: "User not found." });
+        }
+
+        response.json({ success: true, message: "User deleted successfully." });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
   
 
 
