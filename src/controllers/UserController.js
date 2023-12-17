@@ -73,5 +73,30 @@ userRouter.post("/login", async (request, response) => {
 
 });
 
+userRouter.delete("/:id", async (request, response) => {
+	try {
+	  // Check if the user making the request is an admin
+	  const requestingUserId = request.user._id; // Assuming you attach user information to the request during authentication
+	  const requestingUser = await User.findById(requestingUserId);
+  
+	  if (requestingUser.role !== 'admin') {
+		return response.status(403).json({ error: "You are not authorized to delete users." });
+	  }
+  
+	  // If the requester is an admin, proceed with user deletion
+	  const deletedUser = await User.findByIdAndDelete(request.params.id);
+  
+	  if (!deletedUser) {
+		return response.status(404).json({ error: "User not found." });
+	  }
+  
+	  response.json({ success: true, message: "User deleted successfully." });
+	} catch (error) {
+	  console.error(error);
+	  response.status(500).json({ error: "Internal Server Error" });
+	}
+  });
+  
+
 
 module.exports = userRouter;

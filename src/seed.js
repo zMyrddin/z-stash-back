@@ -17,14 +17,34 @@ databaseConnect().then(async () => {
     //     importantNotes: [String]
     // });
 
-    let newUser1 = new User ({
+    let admin = new User ({
         username:"admin",
         password: "fireflyadmin",
-        isAdmin: true
+        role: "admin"
     });
 
-    await newUser1.save().then(() =>{
+    await admin.save().then(() =>{
         console.log("Seed user created")
+    });
+
+    let scout = new User ({
+        username:"scout",
+        password: "fireflyscout",
+        role: "scout"
+    });
+
+    await scout.save().then(() =>{
+        console.log("Seed scout account created")
+    });
+
+    let member = new User ({
+        username:"member",
+        password: "fireflymember",
+        role: "member"
+    });
+
+    await member.save().then(() =>{
+        console.log("Seed member account created")
     });
 
     let newStash1 = new Stash({

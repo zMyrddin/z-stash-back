@@ -29,13 +29,15 @@ const stashRouter = express.Router();
 		}
 	]
 */
+
+// find/list all stashes
 stashRouter.get("/", async (request, response) => {
 	let result = await Stash.find({});
 
 	response.json({result});
 })
 
-// GET localhost:3000/stash/someid
+// GET localhost:3000/stash/someid or get a specific stash id
 stashRouter.get("/:id", async (request, response) => {
 	let result = await Stash.findOne({_id: request.params.id});
 
