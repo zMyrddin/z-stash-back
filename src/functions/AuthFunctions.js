@@ -37,6 +37,11 @@ async function authenticateJWT(request, response, next) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
+        
+        // Log the decoded token and token itself
+        console.log('Decoded Token:', decoded);
+        console.log('Token:', token);
+
         const user = await User.findById(decoded.userId);
 
         if (!user) {
@@ -45,13 +50,13 @@ async function authenticateJWT(request, response, next) {
 
         // Attach user information to the request object
         request.user = user;
-        console.log('Decoded Token:', decoded); // Log the decoded token
         next();
     } catch (error) {
         console.error(error);
         return response.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 }
+
 
 module.exports = {
 	comparePassword, generateJwt, authenticateJWT

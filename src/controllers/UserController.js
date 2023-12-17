@@ -65,7 +65,7 @@ userRouter.post("/login", async (request, response) => {
 	}
 
 	// If they provided the correct, generate a JWT
-	let freshJwt = generateJwt(targetUser._id.toString(), targetUser.role.toString());
+	let freshJwt = generateJwt(targetUser._id.toString(), targetUser.role);
 
 	// respond with the JWT 
 	response.json({
@@ -79,6 +79,7 @@ userRouter.delete("/:id", authenticateJWT, async (request, response) => {
     try {
         // Assuming you have the user's role information stored in the JWT payload
         const userRole = request.user.role;
+		console.log('User Role:', userRole);
 
         // Check if the authenticated user has admin privileges
         if (userRole !== "admin") {
