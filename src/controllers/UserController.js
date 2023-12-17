@@ -2,6 +2,7 @@
 const express = require('express');
 const { User } = require('../models/UserModel');
 const { comparePassword, generateJwt, authenticateJWT } = require('../functions/AuthFunctions');
+const { Admin } = require('mongodb');
 
 // make an instance of a Router
 const userRouter = express.Router();
@@ -76,14 +77,15 @@ userRouter.post("/login", async (request, response) => {
 // DELETE localhost:3000/users/someid
 userRouter.delete("/:id", authenticateJWT, async (request, response) => {
     try {
-        // Check if the user making the request is an admin
-        const requestingUser = request.user; // Now you can use request.user directly
+        // Assuming you have the user's role information stored in the JWT payload
+        const userRole = request.user.role;
 
-        if (requestingUser.role !== 'admin') {
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin") {
             return response.status(403).json({ error: "You are not authorized to delete users." });
         }
 
-        // If the requester is an admin, proceed with user deletion
+        // Proceed with user deletion
         const deletedUser = await User.findByIdAndDelete(request.params.id);
 
         if (!deletedUser) {
