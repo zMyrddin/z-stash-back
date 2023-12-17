@@ -1,6 +1,6 @@
 // import Express library
 const express = require('express');
-const { Stash } = require('../models/StashModel');
+const { Stash } = require('../models/StashesModel');
 // const { comparePassword, generateJwt } = require('../functions/AuthFunctions');
 
 // make an instance of a Router

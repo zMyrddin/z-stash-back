@@ -1,6 +1,6 @@
 // const mongoose = require('mongoose');
 const { databaseConnect } = require('./database');
-const { Stash } = require ('./models/StashModel');
+const { Stash } = require ('./models/StashesModel');
 const { User } = require ('./models/UserModel');
 // import { Stash } from './models/StashModel';
 // import { User } from './models/UserModel';
