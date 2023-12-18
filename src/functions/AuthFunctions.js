@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { User } = require("../models/UserModel");
 
 async function comparePassword(plaintextPassword, hashedPassword) { 
 	let doesPasswordMatch = false;
@@ -20,7 +21,7 @@ function generateJwt(userId, role){
 
 		// Options
 		{
-			expiresIn: "7d"
+			expiresIn: "7d", algorithm: 'HS256'
 		}
 
 	);
@@ -29,32 +30,35 @@ function generateJwt(userId, role){
 }
 
 async function authenticateJWT(request, response, next) {
-    const token = request.header('Authorization');
+    const authHeader = request.header('Authorization');
+    console.log('Authorization Header:', authHeader);
+    
+    // Extract the token (assuming it's in the format "Bearer <token>")
+    const token = authHeader ? authHeader.split(' ')[1] : null;
+    // Log the token value for inspection
+    // console.log('Extracted Token:', token);
+
 
     if (!token) {
         return response.status(401).json({ error: 'Unauthorized: Missing token' });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
-
+        const decoded = jwt.verify(token.trim(), process.env.JWT_KEY, { algorithms: ['HS256'] });
         const user = await User.findById(decoded.userId);
-
+        console.log('User:', user);
+        
         if (!user) {
             return response.status(401).json({ error: 'Unauthorized: Invalid token' });
         }
 
         // Attach user information to the request object
         request.user = user;
-                
-        // Log the decoded token and token itself
-        console.log('Decoded Token:', decoded);
-        console.log('Token:', token);
 
         next();
         
     } catch (error) {
-        console.error(error);
+        console.error('Error during authentication:', error);
         return response.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 }
