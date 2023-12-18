@@ -98,7 +98,112 @@ userRouter.delete("/:id", authenticateJWT, async (request, response) => {
         response.status(500).json({ error: "Internal Server Error" });
     }
 });
-  
+
+// POST localhost:3000/users/create
+userRouter.post("/create", authenticateJWT, async (request, response) => {
+    try {
+        // Assuming you have the user's role information stored in the JWT payload
+        const userRole = request.user.role;
+
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin") {
+            return response.status(403).json({ error: "You are not authorized to create users." });
+        }
+
+        // Extract relevant data from the request body
+        const { username, password, role } = request.body;
+
+        // Validate required fields
+        if (!username || !password || !role) {
+            return response.status(400).json({ error: "Please provide username, password, and role." });
+        }
+
+        // Proceed with user creation
+        const newUser = await User.create({
+            username,
+            password, // UserShema.pre should be hashing the password before saving to the db
+            role            
+        }).catch(error => error);
+
+        if (newUser instanceof Error) {
+            return response.status(400).json({ error: "User creation failed.", details: newUser.message });
+        }
+
+        response.json({ success: true, message: "User created successfully.", user: newUser });
+
+		// to fix this later!!
+		// console.log("User"+response.body.username+" created successfully."); 
+
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// PUT localhost:3000/users/:id
+// Allow admins to update user information
+userRouter.put("/:id", authenticateJWT, async (request, response) => {
+    try {
+        // Assuming you have the user's role information stored in the request object
+        const userRole = request.user.role;
+
+        // Check if the authenticated user is the owner or has admin privileges
+        if (userRole !== "admin" && request.user._id.toString() !== request.params.id) {
+            return response.status(403).json({ error: "You are not authorized to update this user's information." });
+        }
+
+        // Find the user by ID
+        const userToUpdate = await User.findById(request.params.id);
+
+        if (!userToUpdate) {
+            return response.status(404).json({ error: "User not found." });
+        }
+
+        // Use the updateUser method for flexible updates
+        await userToUpdate.updateUser(request.body);
+
+        response.json({ success: true, user: userToUpdate });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// PUT localhost:3000/users/:id
+// Allow users to update their information
+userRouter.patch("/:id", authenticateJWT, async (request, response) => {
+    try {
+        // Assuming you have the user's role information stored in the request object
+        const userRole = request.user.role;
+
+        // Check if the authenticated user is the owner or has admin privileges
+        if (userRole !== "admin" && request.user._id.toString() !== request.params.id) {
+            return response.status(403).json({ error: "You are not authorized to update this user's information." });
+        }
+
+        // Find the user by ID
+        const userToUpdate = await User.findById(request.params.id);
+
+        if (!userToUpdate) {
+            return response.status(404).json({ error: "User not found." });
+        }
+
+		// Log the user information before the update
+		console.log("Before Update:", userToUpdate);
+
+		// Use the updateUser method for flexible updates
+		await userToUpdate.updateUser(request.body);
+
+		// Log the user information after the update
+		console.log("After Update:", userToUpdate);
+		
+        response.json({ success: true, user: userToUpdate });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 
 module.exports = userRouter;

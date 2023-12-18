@@ -21,7 +21,7 @@ function generateJwt(userId, role){
 
 		// Options
 		{
-			expiresIn: "7d", algorithm: 'HS256'
+			expiresIn: "1h", algorithm: 'HS256'
 		}
 
 	);

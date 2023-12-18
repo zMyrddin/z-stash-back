@@ -37,6 +37,29 @@ UserSchema.pre(
 	}
 );
 
+// Custom instance method for updating user information using instance.save()
+UserSchema.methods.updateUser = async function (data) {
+    try {
+        if (data.username) {
+            this.username = data.username;
+        }
+
+        if (data.password) {
+            const hash = await bcrypt.hash(data.password, 10);
+            this.password = hash;
+        }
+
+        if (data.role) {
+            this.role = data.role;
+        }
+
+        await this.save(); // Use instance.save() to save the updated user
+        return this;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 const User = mongoose.model('User', UserSchema);
 
