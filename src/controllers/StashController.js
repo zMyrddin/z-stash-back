@@ -7,29 +7,6 @@ const { authenticateJWT } = require('../functions/AuthFunctions');
 // make an instance of a Router
 const stashRouter = express.Router();
 
-// customise the router instance 
-
-// GET localhost:3000/stashes/
-// Expect a response of ALL stashes in DB: 
-/*
-	[
-		{
-			id:
-			stashName:
-			whateverOtherStashData: 
-		},
-{
-			id:
-			stashName:
-			whateverOtherStashData: 
-		},
-{
-			id:
-			stashName:
-			whateverOtherStashData: 
-		}
-	]
-*/
 
 // find/list all stashes
 stashRouter.get("/", async (request, response) => {

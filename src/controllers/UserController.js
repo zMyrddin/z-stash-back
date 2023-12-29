@@ -6,48 +6,40 @@ const { comparePassword, generateJwt, authenticateJWT } = require('../functions/
 // make an instance of a Router
 const userRouter = express.Router();
 
-// customise the router instance 
+userRouter.get("/", authenticateJWT, async (request, response) => {
+    try {
+        const userRole = request.user.role;
 
-// GET localhost:3000/users/
-// Expect a response of ALL users in DB: 
-/*
-	[
-		{
-			id:
-			username:
-			whateverOtherUserData: 
-		},
-		{
-			id:
-			username:
-			whateverOtherUserData: 
-		},
-		{
-			id:
-			username:
-			whateverOtherUserData: 
-		}
-	]
-*/
-userRouter.get("/", async (request, response) => {
-	let result = await User.find({});
-
-	response.json({result});
-})
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin") {
+            return response.status(403).json({ error: "You are not authorized see this data." });
+        }
+        let result = await User.find({});
+        response.json({ result });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 // GET localhost:3000/users/someid
 userRouter.get("/:id", async (request, response) => {
+    try {
+        const userRole = request.user.role;
+
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin") {
+            return response.status(403).json({ error: "You are not authorized see this data." });
+        }
 	let result = await User.findOne({_id: request.params.id});
 
 	response.json({result});
-})
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
-// POST localhost:3000/users/
-// userRouter.post("/", async (request, response) => {
-// 	let newUser = await User.create(request.body).catch(error => error);
-
-// 	response.json(newUser);
-// });
 
 // POST localhost:3000/users/create
 userRouter.post("/create", authenticateJWT, async (request, response) => {
@@ -107,12 +99,14 @@ userRouter.post("/login", async (request, response) => {
 	}
 
 	// If they provided the correct, generate a JWT
-	let freshJwt = generateJwt(targetUser._id.toString(), targetUser.role);
+	let token = generateJwt(targetUser._id.toString(), targetUser.role);
 	console.log("User: " +request.body.username+" has logged in.");
 
 	// respond with the JWT 
 	response.json({
-		jwt: freshJwt
+		jwt: token,
+        userId: targetUser._id,
+        username: targetUser.username        
 	});
 
 });
