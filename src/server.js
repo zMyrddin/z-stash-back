@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.get("/", (request, response) => {
     response.json({
-        message:"Labyu Kuya lapit na birthday mo"
+        message:"Server is up!"
     });
 });
 
