@@ -10,16 +10,38 @@ const stashRouter = express.Router();
 
 // find/list all stashes
 stashRouter.get("/", async (request, response) => {
+    try {
+        const userRole = request.user.role;
+
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin" && userRole !== "scout" && userRole !== "member") {
+            return response.status(403).json({ error: "You are not authorized see this data." });
+        }
 	let result = await Stash.find({});
 
 	response.json({result});
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+        }
 })
 
 // GET localhost:3000/stash/someid or get a specific stash id
 stashRouter.get("/:id", async (request, response) => {
+    try {
+        const userRole = request.user.role;
+
+        // Check if the authenticated user has admin privileges
+        if (userRole !== "admin" && userRole !== "scout" && userRole !== "member") {
+            return response.status(403).json({ error: "You are not authorized see this data." });
+        }
 	let result = await Stash.findOne({_id: request.params.id});
 
 	response.json({result});
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Internal Server Error" });
+    }
 })
 
 // POST localhost:3000/stash/
