@@ -9,7 +9,7 @@ const StashSchema = new mongoose.Schema({
 	location: {
 		type: String,
 		required: true,
-		unique: true
+		unique: false
 	},
 	landmarks: {
 		type: [String],
