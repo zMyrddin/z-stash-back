@@ -26,7 +26,7 @@ stashRouter.get("/", authenticateJWT, async (request, response) => {
         }
 })
 
-// GET localhost:3000/stash/someid or get a specific stash id
+// GET localhost:3001/stash/someid or get a specific stash id
 stashRouter.get("/:id", authenticateJWT, async (request, response) => {
     try {
         const userRole = request.user.role;
@@ -44,7 +44,7 @@ stashRouter.get("/:id", authenticateJWT, async (request, response) => {
     }
 })
 
-// POST localhost:3000/stash/
+// POST localhost:3001/stash/
 stashRouter.post("/", authenticateJWT, async (request, response) => {
     try {
         // Assuming you have the user's role information stored in the request object
@@ -65,7 +65,7 @@ stashRouter.post("/", authenticateJWT, async (request, response) => {
     }
 });
 
-// PATCH localhost:3000/stashes/:id
+// PATCH localhost:3001/stashes/:id
 // Update a stash by ID
 stashRouter.patch("/:id", authenticateJWT, async (request, response) => {
     try {
@@ -101,7 +101,7 @@ stashRouter.patch("/:id", authenticateJWT, async (request, response) => {
     }
 });
 
-// DELETE localhost:3000/stashes/:id
+// DELETE localhost:3001/stashes/:id
 // Delete a stash by ID
 stashRouter.delete("/:id", authenticateJWT, async (request, response) => {
     try {

@@ -22,7 +22,7 @@ userRouter.get("/", authenticateJWT, async (request, response) => {
     }
 });
 
-// GET localhost:3000/users/someid
+// GET localhost:3001/users/someid
 userRouter.get("/:id", authenticateJWT, async (request, response) => {
     try {
         const userRole = request.user.role;
@@ -41,7 +41,7 @@ userRouter.get("/:id", authenticateJWT, async (request, response) => {
 });
 
 
-// POST localhost:3000/users/create
+// POST localhost:3001/users/create
 userRouter.post("/create", authenticateJWT, async (request, response) => {
     try {
         // Assuming you have the user's role information stored in the JWT payload
@@ -84,7 +84,7 @@ userRouter.post("/create", authenticateJWT, async (request, response) => {
 });
 
 
-// POST localhost:3000/users/login
+// POST localhost:3001/users/login
 userRouter.post("/login", async (request, response) => {
 	// Find user by provided username 
 	let targetUser = await User.findOne({username: request.body.username}).catch(error => error);
@@ -110,7 +110,7 @@ userRouter.post("/login", async (request, response) => {
 
 });
 
-// DELETE localhost:3000/users/someid
+// DELETE localhost:3001/users/someid
 userRouter.delete("/:id", authenticateJWT, async (request, response) => {
     try {
         // Assuming you have the user's role information stored in the request object
