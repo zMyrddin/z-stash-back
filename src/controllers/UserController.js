@@ -85,8 +85,6 @@ userRouter.post("/create", authenticateJWT, async (request, response) => {
 
 
 // POST localhost:3000/users/login
-// request.body = {username: "admin", password: "Password1"}
-// respond with {jwt: "laskdnalksfdnal;fgvkmsngb;sklnmb", valid: true}
 userRouter.post("/login", async (request, response) => {
 	// Find user by provided username 
 	let targetUser = await User.findOne({username: request.body.username}).catch(error => error);
