@@ -8,7 +8,7 @@ const app = express();
 const cors = require('cors');
 const corsOptions = {
 	//			frontend localhost,  frontend deployed
-	origin: ["http://localhost:3000/","http://localhost:3000", "marvelous-sprite-6b2d38.netlify.app"],
+	origin: ["http://localhost:3000/","http://localhost:3000", "marvelous-sprite-6b2d38.netlify.app", "https://marvelous-sprite-6b2d38.netlify.app/","https://marvelous-sprite-6b2d38.netlify.app"],
 	optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions));
