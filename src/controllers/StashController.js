@@ -14,7 +14,7 @@ stashRouter.get("/", authenticateJWT, async (request, response) => {
         const userRole = request.user.role;
 
         // Check if the authenticated user has admin privileges
-        if (userRole !== "admin") {
+        if (userRole !== "admin" && userRole !== "scout" && userRole !== "member") {
             return response.status(403).json({ error: "You are not authorized see this data." });
         }
 	let result = await Stash.find({});
