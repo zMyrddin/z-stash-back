@@ -43,7 +43,7 @@ databaseConnect().then(async () => {
         stashName: "Stash 1",
         location: "In the woods near the old mill.",
         landmarks: ["5m West of the broken shovel","near puddle when raining"],
-        hostileSighting: false,
+        hostileSighting: "none",
         notes: ["Contains canned goods.","Nothing else is special"]
     });
 
