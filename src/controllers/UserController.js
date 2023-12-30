@@ -105,8 +105,9 @@ userRouter.post("/login", async (request, response) => {
 	// respond with the JWT 
 	response.json({
 		jwt: token,
-        userId: targetUser._id,
-        username: targetUser.username        
+        userId: targetUser._id.toString(),
+        username: targetUser.username,     
+        userRole: targetUser.role   
 	});
 
 });
