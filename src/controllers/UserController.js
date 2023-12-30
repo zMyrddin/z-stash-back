@@ -23,7 +23,7 @@ userRouter.get("/", authenticateJWT, async (request, response) => {
 });
 
 // GET localhost:3000/users/someid
-userRouter.get("/:id", async (request, response) => {
+userRouter.get("/:id", authenticateJWT, async (request, response) => {
     try {
         const userRole = request.user.role;
 

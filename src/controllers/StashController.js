@@ -9,12 +9,12 @@ const stashRouter = express.Router();
 
 
 // find/list all stashes
-stashRouter.get("/", async (request, response) => {
+stashRouter.get("/", authenticateJWT, async (request, response) => {
     try {
         const userRole = request.user.role;
 
         // Check if the authenticated user has admin privileges
-        if (userRole !== "admin" && userRole !== "scout" && userRole !== "member") {
+        if (userRole !== "admin") {
             return response.status(403).json({ error: "You are not authorized see this data." });
         }
 	let result = await Stash.find({});
@@ -27,7 +27,7 @@ stashRouter.get("/", async (request, response) => {
 })
 
 // GET localhost:3000/stash/someid or get a specific stash id
-stashRouter.get("/:id", async (request, response) => {
+stashRouter.get("/:id", authenticateJWT, async (request, response) => {
     try {
         const userRole = request.user.role;
 
