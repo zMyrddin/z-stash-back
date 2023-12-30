@@ -16,7 +16,7 @@ const StashSchema = new mongoose.Schema({
 		required: false,
 	},
     hostileSighting:{
-		type: Boolean,
+		type: String,
 		required: true,
 	},
     notes: {
